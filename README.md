@@ -28,7 +28,7 @@ CulturaDB is a data pipeline that fetches movie data from The Movie Database (TM
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/stephsiorek/CulturaDB.git
    cd CulturaDB
    ```
 
