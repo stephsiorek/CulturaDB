@@ -72,6 +72,20 @@ function MovieList() {
     setPage(1) // Reset to first page on filter change
   }
 
+  const clearFilters = () => {
+    setFilters({
+      min_vote_average: '',
+      min_vote_count: '',
+      release_date_from: '',
+      release_date_to: '',
+      year: ''
+    })
+    setOrderBy('release_date')
+    setOrderDirection('desc')
+    setSearch('')
+    setPage(1)
+  }
+
   return (
     <div className="movie-list">
       <div className="movie-list-header">
@@ -189,6 +203,16 @@ function MovieList() {
             <option value="desc">Descending</option>
             <option value="asc">Ascending</option>
           </select>
+        </div>
+        <div className="filter-group filter-actions">
+          <label>&nbsp;</label>
+          <button 
+            type="button" 
+            onClick={clearFilters}
+            className="clear-filters-btn"
+          >
+            Clear Filters
+          </button>
         </div>
       </div>
 
