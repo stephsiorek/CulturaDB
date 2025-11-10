@@ -1,3 +1,7 @@
 pythonenv/
 .env
+backend/__pycache__/
+backend/api/__pycache__/
+backend/api/services/__pycache__/
+backend/api/routes/__pycache__/
 CulturaDB.code-workspace

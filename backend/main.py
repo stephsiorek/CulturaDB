@@ -23,7 +23,12 @@ app = FastAPI(
 # CORS configuration for React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],  # Vite default port, Next.js default
+    allow_origins=[
+        "http://localhost:5173",  # Vite default port
+        "http://localhost:5174",  # Vite alternate port
+        "http://localhost:3000",  # Next.js default
+    ],
+    allow_origin_regex=r"http://localhost:\d+",  # Allow any localhost port for development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
