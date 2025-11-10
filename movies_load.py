@@ -1,8 +1,8 @@
 """
-movies.py - TMDB → Snowflake pipeline (optional CSV)
+movies_load.py - TMDB → Snowflake pipeline (optional CSV)
 
 Usage:
-  python movies.py [options]
+  python movies_load.py [options]
 
 Key behavior:
   - Always loads fetched rows into Snowflake (upsert/merge by (id, release_date), keeps earliest ds)
@@ -42,22 +42,22 @@ Incremental filters (discover/movie):
 
 Examples:
   # Default: fetch 1 page of popular movies and load to Snowflake
-  python movies.py
+  python movies_load.py
 
   # Fetch 3 pages, also write CSV
-  python movies.py --pages 3 --write-csv --output popular.csv
+  python movies_load.py --pages 3 --write-csv --output popular.csv
 
   # Incremental last 7 days using discover/movie (auto-switch)
-  python movies.py --since-days 7
+  python movies_load.py --since-days 7
 
   # Explicit release window
-  python movies.py --primary-release-date-gte 2025-10-01 --primary-release-date-lte 2025-10-31
+  python movies_load.py --primary-release-date-gte 2025-10-01 --primary-release-date-lte 2025-10-31
 
   # Add extra TMDB filters
-  python movies.py --use-discover --since-days 30 --params '{"with_original_language":"en"}'
+  python movies_load.py --use-discover --since-days 30 --params '{"with_original_language":"en"}'
 
   # Schedule nightly at 02:30 with last 1 day window
-  python movies.py --since-days 1 --schedule-daily 02:30
+  python movies_load.py --since-days 1 --schedule-daily 02:30
 """
 import os
 import csv

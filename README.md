@@ -4,10 +4,13 @@ A unified data hub for movies and books, powered by Python and Snowflake.
 
 ## Overview
 
-CulturaDB is a data pipeline that fetches movie data from The Movie Database (TMDB) API and loads it into Snowflake with automatic deduplication and incremental updates. The pipeline supports flexible filtering, pagination, and optional CSV export.
+CulturaDB is a unified data hub for movies and books, consisting of:
+- **Data Pipeline**: Fetches movie data from The Movie Database (TMDB) API and loads it into Snowflake with automatic deduplication and incremental updates. Supports flexible filtering, pagination, and optional CSV export.
+- **Web Application**: A FastAPI + React web app for viewing, searching, filtering, and analyzing movie data from Snowflake.
 
 ## Features
 
+### Data Pipeline
 - **TMDB Integration**: Fetches movie data from TMDB API (v3/v4)
 - **Snowflake Loading**: Automatic upsert/merge into Snowflake with deduplication by (id, release_date)
 - **Incremental Updates**: Date-based filtering to fetch only new or updated movies
@@ -15,6 +18,13 @@ CulturaDB is a data pipeline that fetches movie data from The Movie Database (TM
 - **Optional CSV Export**: Write results to local CSV files
 - **Daily Scheduling**: Run the pipeline automatically at specified times
 - **Data Quality**: Filters out records without valid release dates
+
+### Web Application
+- **Movie Browser**: View, search, and filter movies from Snowflake
+- **Advanced Filtering**: Filter by rating, vote count, release date, year
+- **Sorting**: Sort by rating, vote count, title, or release date (ascending/descending)
+- **Statistics Dashboard**: View aggregated movie statistics
+- **Real-time Data**: Direct connection to Snowflake for up-to-date information
 
 ## Setup
 
@@ -62,43 +72,45 @@ CulturaDB is a data pipeline that fetches movie data from The Movie Database (TM
 
 ## Movies Pipeline
 
+The `movies_load.py` script fetches movie data from the TMDB API and loads it into Snowflake (with optional CSV export). It handles deduplication, incremental updates, and data quality checks.
+
 ### Quick Start
 
 Fetch 1 page of popular movies and load to Snowflake:
 ```bash
-python movies.py
+python movies_load.py
 ```
 
 ### Common Usage Examples
 
 **Incremental daily load (last 1 day):**
 ```bash
-python movies.py --since-days 1
+python movies_load.py --since-days 1
 ```
 
 **Fetch last 7 days with 3 pages:**
 ```bash
-python movies.py --since-days 7 --pages 3
+python movies_load.py --since-days 7 --pages 3
 ```
 
 **Explicit date range:**
 ```bash
-python movies.py --primary-release-date-gte 2025-10-01 --primary-release-date-lte 2025-10-31
+python movies_load.py --primary-release-date-gte 2025-10-01 --primary-release-date-lte 2025-10-31
 ```
 
 **Fetch specific page range (e.g., pages 6-10):**
 ```bash
-python movies.py --page-start 6 --page-end 10
+python movies_load.py --page-start 6 --page-end 10
 ```
 
 **Also write to CSV:**
 ```bash
-python movies.py --since-days 7 --write-csv --output movies.csv
+python movies_load.py --since-days 7 --write-csv --output movies.csv
 ```
 
 **Schedule daily at 02:30:**
 ```bash
-python movies.py --since-days 1 --schedule-daily 02:30
+python movies_load.py --since-days 1 --schedule-daily 02:30
 ```
 
 ### CLI Options
@@ -155,6 +167,54 @@ The pipeline automatically deduplicates records by `(id, release_date)`:
 - **Page limits (400)**: Detects when exceeding TMDB's ~500 page limit
 - **Auth errors (401)**: Helpful guidance for credential issues
 - **Invalid dates**: Automatically filters out records without valid release dates
+
+## Web Application
+
+The CulturaDB web application provides a user-friendly interface for viewing and analyzing movie data stored in Snowflake.
+
+### Architecture
+
+- **Backend**: FastAPI (Python) - RESTful API that connects to Snowflake
+- **Frontend**: React with Vite - Modern, responsive web interface
+- **Database**: Snowflake - Data warehouse for movie data
+
+### Setup
+
+1. **Backend Setup**:
+   ```bash
+   cd backend
+   python run.py
+   ```
+   The API will run on `http://localhost:8000`
+
+2. **Frontend Setup**:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   The web app will run on `http://localhost:5173`
+
+### Features
+
+- **Movies Page**: Browse, search, and filter movies with advanced options
+  - Search by title
+  - Filter by rating, vote count, release date, year
+  - Sort by rating, vote count, title, or release date
+  - Pagination support
+- **Statistics Page**: View aggregated movie statistics
+  - Total movies
+  - Average rating
+  - Total votes
+  - Movies by year
+  - And more
+
+### API Endpoints
+
+- `GET /api/movies/` - Get movies with filtering, sorting, and pagination
+- `GET /api/movies/{id}` - Get movie by ID
+- `GET /api/movies/stats` - Get movie statistics
+- `GET /api/health` - Health check endpoint
 
 ## Books Pipeline
 
