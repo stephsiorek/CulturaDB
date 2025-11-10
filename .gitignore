@@ -1,7 +1,14 @@
 pythonenv/
 .env
-backend/__pycache__/
-backend/api/__pycache__/
-backend/api/services/__pycache__/
-backend/api/routes/__pycache__/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
 CulturaDB.code-workspace
